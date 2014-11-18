@@ -34,6 +34,7 @@ public class EstimoteBeacons extends CordovaPlugin {
     // Variables
     private BeaconManager beaconManager;
     private Region currentRegion;
+    private Utils util = new Utils();
     private List<Beacon> beacons = new ArrayList<Beacon>();
     private int inRegion = 0;
 
@@ -47,6 +48,7 @@ public class EstimoteBeacons extends CordovaPlugin {
         super.initialize(cordova, webView);
 
         beaconManager = new BeaconManager(this.cordova.getActivity().getApplicationContext());
+        beaconManager.setBackgroundScanPeriod(1000,0);
         currentRegion = new Region("regionId", REGION_ID, null, null);
     }
 
@@ -203,6 +205,7 @@ public class EstimoteBeacons extends CordovaPlugin {
         jsonObject.put("rssi", beacon.getRssi());
         jsonObject.put("macAddress", beacon.getMacAddress());
         jsonObject.put("measuredPower", beacon.getMeasuredPower());
+        jsonObject.put("dist", util.computeAccuracy(beacon));
         return jsonObject;
     }
 }
